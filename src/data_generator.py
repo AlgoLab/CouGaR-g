@@ -4,7 +4,6 @@ from typing import List, Union, Callable, Optional
 from pathlib import Path
 import numpy as np
 import tensorflow as tf
-from PIL import Image
 from .npy_loader import InputOutputLoader
 
 class DataGenerator(tf.keras.utils.Sequence):

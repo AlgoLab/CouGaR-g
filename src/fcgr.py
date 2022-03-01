@@ -27,8 +27,7 @@ class FCGR(CGR):
         freq_matrix = np.zeros((array_size,array_size))
 
         # Assign frequency to each box in the matrix
-        for kmer, freq in self.freq_kmer.items():
-            #pos_x, pos_y = self.pixel_position(kmer)          
+        for kmer, freq in self.freq_kmer.items():        
             pos_x, pos_y = self.kmer2pixel[kmer]
             freq_matrix[int(pos_x)-1,int(pos_y)-1] = freq
         return freq_matrix
