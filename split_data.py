@@ -1,5 +1,5 @@
+"""Divide FCGR generated into train, validation and test sets"""
 import json
-import numpy as np
 import pandas as pd
 from parameters import PARAMETERS
 from pathlib import Path

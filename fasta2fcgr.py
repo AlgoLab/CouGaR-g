@@ -1,3 +1,4 @@
+"""Create and FCGR.npy for each sequence.fasta in a folder"""
 from pathlib import Path
 from parameters import PARAMETERS
 from src.generate_fcgr import GenerateFCGR
