@@ -36,6 +36,8 @@ model.compile(optimizer=tf.keras.optimizers.Adam(),
 )
 
 preprocessing = Pipeline(PREPROCESSING)
+Path("data/train").mkdir(exist_ok=True, parents=True)
+preprocessing.asJSON("data/train/preprocessing.json")
 
 # -2- Datasets
 # load list of images for train and validation sets
