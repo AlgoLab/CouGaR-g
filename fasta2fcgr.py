@@ -7,6 +7,7 @@ FOLDER_FASTA = Path(PARAMETERS["FOLDER_FASTA"])
 LIST_FASTA   = list(FOLDER_FASTA.rglob("*fasta"))
 KMER = PARAMETERS["KMER"] 
 FOLDER_FCGR = PARAMETERS["FOLDER_FCGR"]
+
 #Instantiate class to generate FCGR
 generate_fcgr = GenerateFCGR(
                 destination_folder=FOLDER_FCGR,

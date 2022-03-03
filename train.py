@@ -6,7 +6,7 @@ import tensorflow as tf
 from src.model_loader import ModelLoader
 from src.data_generator import DataGenerator  
 from preprocessing import Pipeline
-from parameters import PARAMETERS, PREPROCESSING
+from parameters import PARAMETERS
 
 # parameters 
 SEED   = PARAMETERS["SEED"]

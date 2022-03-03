@@ -15,7 +15,7 @@ PATH_FASTA_GISAID = "/data/GISAID/sequences.fasta"
 # For training
 TRAIN_SIZE = 0.8 # size for val and test sets = (1-TRAIN_SIZE)/2
 BATCH_SIZE = 16
-EPOCHS = 20
+EPOCHS = 50
 MODEL = f"resnet50_{KMER}mers"
 PREPROCESSING = [("divide_by_max",{})] # ("name_function", dict_kwargs)
 WEIGHTS_PATH = None
