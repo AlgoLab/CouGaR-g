@@ -1,8 +1,11 @@
 
 import re
-from itertools import product
 import numpy as np 
+
+from collections import namedtuple
+from itertools import product
 from PIL import Image
+
 from .fcgr import FCGR
 
 def array2img(array):
@@ -52,3 +55,34 @@ def preprocess_seq(seq):
     for letter in "BDEFHIJKLMOPQRSUVWXYZ":
         seq = seq.replace(letter,"N")
     return seq
+
+def kmer_importance(smap, threshold, fcgr, fcgrpos2kmer):
+    """find most relevant kmers for the prediction based on saliency map
+
+    Args:
+        smap (array]): saliency map
+        threshold (float): between 0 and 1 to filter gradients in smap
+        fcgr (array): the FCGR matrix
+        pos2kmer (dict): dictionary to map position in FCGR to the kmer
+
+    Returns:
+        list: information about kmer importance, sorted by the value of the gradient
+    """    
+    kmer_importance=namedtuple("kmer_importance", ["kmer","row","col","grad","freq"])
+
+    rows, cols = np.where(smap > threshold)
+    list_kmers = []
+    for row,col in zip(rows,cols):
+        list_kmers.append(
+            kmer_importance(fcgrpos2kmer.get((row,col)), 
+            row,
+            col, 
+            smap[row,col], 
+            fcgr[row,col]
+            )
+        )
+
+    # Sort values by importance (value of the gradient) 
+    list_kmers = sorted(list_kmers, key=lambda x: x.grad,reverse=True)
+
+    return list_kmers
