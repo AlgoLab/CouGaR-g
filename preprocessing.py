@@ -7,11 +7,9 @@ from src.pipeline import (
 @register_in_pipeline
 def divide_by_max(npy,):
     "The input npy divided by his maximum value"
-    npy /= npy.max()
-    return npy
+    return npy / npy.max()
 
 @register_in_pipeline
 def divide_by_sum(npy,):
     "The input npy divided by the sum of their values"
-    npy /= npy.sum()
-    return npy
+    return npy / npy.sum()
