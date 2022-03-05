@@ -29,7 +29,6 @@ with open(PATH_FASTA_GISAID) as handle:
     for record in SeqIO.parse(handle, "fasta"):
         
         # save sequence if it was selected
-        #FIXME: replace record.description by record.description. blank space split the id
         if record.description in set_fasta_id:
             # save sequence in a fasta file "<accession_id>.fasta"
             clade    = clades_by_fastaid.get(record.description) 
@@ -46,4 +45,5 @@ with open(PATH_FASTA_GISAID) as handle:
             break
 pbar.close()
 
-pd.Series(list(set_fasta_id)).to_csv(FOLDER_FASTA.joinpath("not_found.csv"))
+if len(set_fasta_id):
+    pd.Series(list(set_fasta_id)).to_csv(FOLDER_FASTA.joinpath("not_found.csv"))
