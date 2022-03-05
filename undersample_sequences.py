@@ -1,6 +1,6 @@
 """Undersample GISAID metadata, select sequences by clade"""
 import random
-from collections import namedtuple
+from collections import namedtuple, Counter
 from pathlib import Path
 from tqdm import tqdm
 import pandas as pd
@@ -14,15 +14,16 @@ SAMPLES_PER_CLADE = PARAMETERS["SAMPLES_PER_CLADE"]
 
 print(">> Undersample sequences <<")
 # Load metadata
-COLS = ["Virus name", "Accession ID", "Collection date", "Submission date","Clade", "Host", "Is complete?"]
-data = pd.read_csv(PATH_METADATA,sep="\t")
+COLS = ["Virus name", "Collection date", "Submission date","Clade", "Host", "Is complete?"]
+data = pd.read_csv(PATH_METADATA,sep="\t", usecols=COLS)
 
 # Remove NaN in Clades and not-complete sequences
 data.dropna(axis="rows",
             how="any",
-            subset=["Is complete?", "Clade"], 
+            subset=COLS, 
             inplace=True,
             )
+data.drop_duplicates(subset=COLS, inplace=True)
 
 # Filter by Clades and Host
 CLADES = tuple(clade for clade in CLADES)
@@ -47,4 +48,7 @@ for clade in tqdm(CLADES):
     list_fasta_selected.extend([SampleClade(fasta_id, clade) for fasta_id in samples_clade[:SAMPLES_PER_CLADE]])
 
 Path("data/train").mkdir(exist_ok=True, parents=True)
-pd.DataFrame(list_fasta_selected).to_csv("data/train/undersample_by_clade.csv")
+fasta_selected = pd.DataFrame(list_fasta_selected)
+fasta_selected.to_csv("data/train/undersample_by_clade.csv")
+pd.Series(Counter(fasta_selected["clade"])).to_csv("data/train/selected_by_clade.csv")
+pd.Series(Counter(data["Clade"])).to_csv("data/train/available_by_clade.csv")
