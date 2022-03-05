@@ -3,8 +3,8 @@ Frequence Chaos Game Representation with Deep Learning
 
 Create a virtual environment and install packages
 ```
-python -m venv fcgr
-source fcgr/bin/activate
+python -m venv env
+source env/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -20,6 +20,17 @@ Run codes in this order
 6. `classification_metrics` 
 7. `clustering_metrics` 
 
-A folder `data/` will be created after training. 
-- `data/checkpoints` will save the best weights during training.
-- `data/test` will save all the metrics (classification and clustering) resulting from the evaluation of the best model on the test set.
+A folder `data/` will be created to save all intermediate results: 
+- `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 
+- `train/` will contain 
+    - `undersample_by_clade.csv`
+    - `available_by_clade.csv` a summary of the available sequences by clade, subject to the restrictions made in `undersample_sequences.py`(remove duplicates and empty rows)
+    - `selected_by_clade.csv` a summary of the selected sequences by clade
+    - `checkpoints/` will save the best weights during training.
+    - `preprocessing.json` will save a list with the preprocessing applied to each FCGR during training.
+    - `training_log.csv`: accuracy and loss and learning rate per epoch for train and validation sets.
+    - `test/` will save all the metrics (classification and clustering) resulting from the evaluation of the best model on the test set.
+    - `plots` accuracy and loss plots during training, confusion matrix
+    - `saliency_maps/` representative FCGR by clade, saliency map and relevant k-mers for that representative.
+
+A folder `fcgr-<KMER>-mer/` will contain all the FCGR created from the sequences in `data/<SPECIE>` 
