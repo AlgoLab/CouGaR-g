@@ -9,9 +9,9 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 from parameters import PARAMETERS
 KMER = PARAMETERS["KMER"]
-PATH = Path("data")
+PATH = Path(f"/home/disco/Data/paper-covid19/results/train-{KMER}mers/data")
 PATH_PLOTS = PATH.joinpath("plots")
-PATH_PLOTS.mkdir(exist_ok=True)
+PATH_PLOTS.mkdir(exist_ok=True, parents=True)
 
 ## Training metrics
 training_log = pd.read_csv(PATH.joinpath("train/training_log.csv"))
@@ -25,7 +25,7 @@ training_log.rename({
                     ).plot("epoch", ["training", "validation"], 
                             title = f"Model Accuracy | kmer={KMER}")
 plt.savefig(PATH_PLOTS.joinpath(f"accuracy_{KMER}mer.jpg"))
-
+plt.savefig(PATH_PLOTS.joinpath(f"accuracy_{KMER}mer.pdf"))
 # Loss
 training_log.rename({
                     "loss": "training",
@@ -35,6 +35,7 @@ training_log.rename({
                     ).plot("epoch", ["training", "validation"], 
                             title=f"Model Loss | kmer={KMER}")
 plt.savefig(PATH_PLOTS.joinpath(f"loss_{KMER}mer.jpg"))
+plt.savefig(PATH_PLOTS.joinpath(f"loss_{KMER}mer.pdf"))
 
 ## Confusion matrix
 predictions = pd.read_csv(PATH.joinpath("test/predictions.csv"))
@@ -43,3 +44,5 @@ y_pred = predictions.prediction
 ConfusionMatrixDisplay.from_predictions(y_true, y_pred,)
 plt.title(f"Confusion matrix | kmer={KMER}")
 plt.savefig(PATH_PLOTS.joinpath(f"confusion_matrix_{KMER}mer.jpg"))
+plt.savefig(PATH_PLOTS.joinpath(f"confusion_matrix_{KMER}mer.pdf"))
+
