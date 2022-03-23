@@ -14,11 +14,13 @@ Set parameters for the experiment in `parameters.py`
 Run codes in this order
 1. `undersample_sequences.py`
 2. `extract_sequences.py`
+3. `fasta2fcgr`
 3. `split_data.py` will create a file `datasets.json` with train, validation and test sets
 4. `train.py`
 5. `test.py`
-6. `classification_metrics` 
-7. `clustering_metrics` 
+6. `classification_metrics.py` 
+7. `clustering_metrics.py` 
+8. `plots.py`
 
 A folder `data/` will be created to save all intermediate results: 
 - `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 

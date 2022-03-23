@@ -86,3 +86,38 @@ def kmer_importance(smap, threshold, fcgr, fcgrpos2kmer):
     list_kmers = sorted(list_kmers, key=lambda x: x.grad,reverse=True)
 
     return list_kmers
+
+
+def kmer_importance_shap(shap_values, threshold, fcgr, fcgrpos2kmer, Nmin = None):
+    """find most relevant kmers for the prediction based on saliency map
+    Args:
+        shap_values (array): shap_values for the clade of the fcgr
+        threshold (float): to filter elements in abs(shap_values)
+        fcgr (array): the FCGR matrix
+        fcgrpos2kmer (dict): dictionary to map position in FCGR to the kmer
+    Returns:
+        list: information about kmer importance, sorted by the value of the gradient
+    """    
+    kmer_importance=namedtuple("kmer_importance", ["kmer","row","col","sv","freq"])
+
+    rows, cols = np.where(np.abs(shap_values) > threshold)
+    
+    # if number of elements is less than the minimum required, analyze all elements
+    if Nmin is not None:
+        if len(rows) < Nmin: 
+            rows, cols = np.where(np.abs(shap_values) > 0.)
+
+    list_kmers = []
+    for row,col in zip(rows,cols):
+        list_kmers.append(
+            kmer_importance(fcgrpos2kmer.get((row,col)), 
+            row,
+            col, 
+            shap_values[row,col], 
+            fcgr[row,col]
+            )
+        )
+    
+    # Sort values by importance (value of the gradient) 
+    list_kmers = sorted(list_kmers, key=lambda x: abs(x.sv),reverse=True)
+    return list_kmers
