@@ -5,3 +5,5 @@ pandas
 biopython
 pillow
 matplotlib
+shap
+opencv-python
