@@ -5,7 +5,7 @@ SPECIE: "hCoV-19"
 # Undersample sequences
 PATH_FASTA_GISAID: "/home/disco/Data/GISAID/sequences_aux.fasta"
 PATH_METADATA: "/home/disco/Data/GISAID/metadata_aux.tsv"
-CLADES: ['S','L','G','V','GR','GH','GV','GRY']
+CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY'] #['S','L','G','V','GR','GH','GV','GRY']
 SAMPLES_PER_CLADE: 5000
 
 # For training

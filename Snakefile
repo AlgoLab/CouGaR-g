@@ -1,5 +1,19 @@
 configfile: "parameters.yaml"
 
+## 10. feature importance methods
+# shap values
+
+# saliency map
+rule saliency_map:
+    input:
+        "data/test/predictions.csv"
+    output: 
+        expand("data/saliency_map/{clade}/relevant_kmers.csv", clade=config["CLADES"]),
+        expand("data/saliency_map/{clade}/representative_FCGR.npy", clade=config["CLADES"]),
+        expand("data/saliency_map/{clade}/saliency_map.npy", clade=config["CLADES"]),
+    script:
+        "saliency_map.py"
+
 ## 9. generate plots
 rule plots:
     input:

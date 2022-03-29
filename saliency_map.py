@@ -17,10 +17,9 @@ from preprocessing import Pipeline
 from parameters import PARAMETERS
 
 KMER = PARAMETERS["KMER"]
-MODEL_NAME = PARAMETERS["MODEL"]
 CLADES     = PARAMETERS["CLADES"] # order output model
-PREPROCESSING = PARAMETERS["PREPROCESSING"]
-
+PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
+MODEL_NAME  = f"resnet50_{KMER}mers"
 PATH_SMAP = Path("data/saliency_map")
 PATH_SMAP.mkdir(exist_ok=True)
 
@@ -63,7 +62,7 @@ for clade in tqdm(CLADES):
     for path in paths_tp_clade: 
         fcgr = np.load(path)
         rep_fcgr = np.add(rep_fcgr, fcgr)
-    rep_fcgr = rep_fcgr/len(paths_tp_clade)
+    rep_fcgr = rep_fcgr/len(paths_tp_clade) 
 
     # compute saliency map for the representative FCGR
     input_model = np.expand_dims(preprocessing(rep_fcgr), axis=0)
