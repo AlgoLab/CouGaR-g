@@ -1,5 +1,30 @@
 configfile: "parameters.yaml"
 
+## 11. svm experiment
+# shap values
+rule svm_shap_values:
+    input:
+        expand("data/shap_values/{clade}/relevant_kmers.csv", clade=config["CLADES"]), 
+    params:
+        feature_method="shap_values",
+        kmer=config["KMER"]
+    output: 
+        expand("data/svm/{feature_method}/results_svm_{kmer}mer.csv", feature_method="shap_values", kmer=config["KMER"])
+    shell: 
+        "python3 svm_experiment.py {params.feature_method}"
+
+
+# saliency map
+rule svm_saliency_map:
+    input:
+        expand("data/saliency_map/{clade}/relevant_kmers.csv", clade=config["CLADES"]), 
+    params:
+        feature_method="saliency_map",
+    output: 
+        expand("data/svm/{feature_method}/results_svm_{kmer}mer.csv", feature_method="saliency_map", kmer=config["KMER"])
+    shell: 
+        "python3 svm_experiment.py {params.feature_method}"
+
 ## 10. feature importance methods
 # shap values
 rule shap:
@@ -99,10 +124,6 @@ rule generate_fcgr:
 rule extract_sequences:
     input: 
         "data/train/undersample_by_clade.csv"
-    params:
-        specie = config["SPECIE"] 
-    # output:
-    #     "data/{params.specie}"
     output:
         expand("data/{specie}/extracted_sequences.txt", specie=config["SPECIE"])
     script: 
