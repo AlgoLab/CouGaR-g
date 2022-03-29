@@ -2,6 +2,14 @@ configfile: "parameters.yaml"
 
 ## 10. feature importance methods
 # shap values
+rule shap:
+    input:
+        "data/test/predictions.csv"
+    output: 
+        expand("data/shap_values/{clade}/relevant_kmers.csv", clade=config["CLADES"]),
+        expand("data/shap_values/{clade}/shap_values.npy", clade=config["CLADES"]),
+    script:
+        "shap_values.py"
 
 # saliency map
 rule saliency_map:
