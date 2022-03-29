@@ -1,6 +1,15 @@
 configfile: "parameters.yaml"
 
-## Extract undersampled sequences in individual fasta files 
+## 3. Generate FCGR
+rule generate_fcgr:
+    input:
+        expand("data/{specie}/extracted_sequences.txt", specie=config["SPECIE"])
+    output:
+        expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"])
+    script:
+        "fasta2fcgr.py"
+
+## 2. Extract undersampled sequences in individual fasta files 
 rule extract_sequences:
     input: 
         "data/train/undersample_by_clade.csv"
@@ -14,7 +23,7 @@ rule extract_sequences:
         "extract_sequences.py"
 
 
-## Undersample sequences from metadata
+## 1. Undersample sequences from metadata
 rule undersample_sequences:
     input: 
         config["PATH_METADATA"],

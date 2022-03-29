@@ -14,19 +14,19 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Set parameters for the experiment in `parameters.py`
+Set parameters for the experiment in `parameters.yaml`
 - See (and include) preprocessing functions at `preprocessing.py`
 
-Run codes in this order
+Snakefile runs codes in this order
 1. `undersample_sequences.py`
-2. `extract_sequences.py`
-3. `fasta2fcgr`
-3. `split_data.py` will create a file `datasets.json` with train, validation and test sets
-4. `train.py`
+2. `extract_sequences.py` (extract each undersample sequence in individuals fasta files)
+3. `fasta2fcgr` (generates a npy file with the $k$th-FCGR for each extracted sequence in the previous step)
+3. `split_data.py` (will create a file `datasets.json` with train, validation and test sets)
+4. `train.py` (train the model for the $k$-mer selected)
 5. `test.py`
-6. `classification_metrics.py` 
-7. `clustering_metrics.py` 
-8. `plots.py`
+6. `classification_metrics.py` (computes accuracy, precision, recall and f1-score) 
+7. `clustering_metrics.py` (computes Silhouette score, Calinski-Harabaz and Generalized Discrimination Value in the test set)
+8. `plots.py` (generates plot for accuracy and loss in the training and validation sets. Confusion matrix for the test set)
 
 A folder `data/` will be created to save all intermediate results: 
 - `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 
