@@ -3,10 +3,10 @@ KMER: 6
 SPECIE: "hCoV-19"
 
 # INPUT DATA
-PATH_FASTA_GISAID: "/home/disco/Data/GISAID/sequences_aux.fasta"
-PATH_METADATA: "/home/disco/Data/GISAID/metadata_aux.tsv"
-PATH_REFERENCE_GENOME: "/home/disco/Data/paper-covid19/results/EPI_ISL_402124.fasta"
-CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY'] #['S','L','G','V','GR','GH','GV','GRY']
+PATH_FASTA_GISAID: "path/to/sequences.fasta"
+PATH_METADATA: "path/to/metadata.tsv"
+PATH_REFERENCE_GENOME: "path/to/reference.fasta"
+CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY']
 SAMPLES_PER_CLADE: 5000
 
 # MODEL
