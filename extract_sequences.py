@@ -11,7 +11,7 @@ print(">> Extracting sequences <<")
 
 PATH_FASTA_GISAID = PARAMETERS["PATH_FASTA_GISAID"]
 SPECIE = PARAMETERS["SPECIE"]
-FOLDER_FASTA = Path(PARAMETERS["FOLDER_FASTA"]) # here will be saved the selected sequences by clade
+FOLDER_FASTA = Path(f"data/{SPECIE}")#Path(PARAMETERS["FOLDER_FASTA"]) # here will be saved the selected sequences by clade
 FOLDER_FASTA.mkdir(parents=True, exist_ok=True)
 
 # Create folder for each clade
@@ -21,6 +21,7 @@ for clade in PARAMETERS["CLADES"]:
 # load fasta_id to save
 undersample = pd.read_csv("data/train/undersample_by_clade.csv").to_dict("records")
 set_fasta_id = set([record.get("fasta_id") for record in undersample])
+N_seqs_to_extract = len(set_fasta_id)
 clades_by_fastaid = {record.get("fasta_id"): record.get("clade") for record in undersample} 
 
 pbar = tqdm(total=len(set_fasta_id))
@@ -47,3 +48,7 @@ pbar.close()
 
 if len(set_fasta_id):
     pd.Series(list(set_fasta_id)).to_csv(FOLDER_FASTA.joinpath("not_found.csv"))
+
+with open(f"data/{SPECIE}/extracted_sequences.txt","w") as fp:
+    extracted_seqs = len(list(FOLDER_FASTA.rglob("*.fasta")))
+    fp.write(f"{extracted_seqs}/{N_seqs_to_extract}")
