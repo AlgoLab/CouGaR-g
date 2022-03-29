@@ -1,5 +1,15 @@
 configfile: "parameters.yaml"
 
+## 4. train, val, test sets
+rule name:
+    input:
+        expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
+    output: 
+        "data/train/datasets.json",
+        "data/train/summary_labels.csv"
+    script: 
+        "split_data.py"    
+
 ## 3. Generate FCGR
 rule generate_fcgr:
     input:

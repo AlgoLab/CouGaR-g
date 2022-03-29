@@ -8,7 +8,7 @@ Frequence Chaos Game Representation with Deep Learning
 
 ## 
 Create a virtual environment and install packages
-```
+```bash
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
@@ -17,6 +17,12 @@ pip install -r requirements.txt
 Set parameters for the experiment in `parameters.yaml`
 - See (and include) preprocessing functions at `preprocessing.py`
 
+Run pipeline
+```bash
+snakemake -p -c1
+```
+
+___
 Snakefile runs codes in this order
 1. `undersample_sequences.py`
 2. `extract_sequences.py` (extract each undersample sequence in individuals fasta files)
