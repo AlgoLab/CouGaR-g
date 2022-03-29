@@ -11,12 +11,13 @@ from parameters import PARAMETERS
 # parameters 
 SEED   = PARAMETERS["SEED"]
 KMER = PARAMETERS["KMER"]
-MODEL  = PARAMETERS["MODEL"]
 CLADES = PARAMETERS["CLADES"]
 BATCH_SIZE = PARAMETERS["BATCH_SIZE"]
 EPOCHS = PARAMETERS["EPOCHS"]
 WEIGHTS_PATH = PARAMETERS["WEIGHTS_PATH"]
-PREPROCESSING = PARAMETERS["PREPROCESSING"]
+PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
+
+MODEL_NAME  = f"resnet50_{KMER}mers"
 
 # set seed for reproducibility
 tf.random.set_seed(SEED)
@@ -25,7 +26,7 @@ np.random.seed(SEED)
 # -1- Model selection
 loader = ModelLoader()
 model  = loader(
-            model_name=MODEL,
+            model_name=MODEL_NAME,
             n_outputs=len(CLADES),
             weights_path=WEIGHTS_PATH
             ) # get compiled model from ./supervised_dna/models
@@ -41,7 +42,7 @@ preprocessing.asJSON("data/train/preprocessing.json")
 
 # -2- Datasets
 # load list of images for train and validation sets
-with open("datasets.json","r") as f:
+with open("data/train/datasets.json","r") as f:
     datasets = json.load(f)
 list_train = datasets["train"]
 list_val   = datasets["val"]

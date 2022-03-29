@@ -1,5 +1,25 @@
 configfile: "parameters.yaml"
 
+## 6. test model
+rule test_model:
+    input: 
+        "data/train/datasets.json",
+        "data/train/training_log.csv"
+    output: 
+        "data/test/embeddings.npy",
+        "data/test/predictions.csv"
+    script: "test.py"
+
+## 5.  train model
+rule train_model:
+    input: 
+        "data/train/datasets.json"
+    output: 
+        "data/train/training_log.csv",
+        "data/train/preprocessing.json"
+    script: 
+        "train.py"
+
 ## 4. train, val, test sets
 rule name:
     input:
