@@ -1,5 +1,39 @@
 configfile: "parameters.yaml"
 
+## 9. generate plots
+rule plots:
+    input:
+        "data/train/training_log.csv",
+        "data/test/predictions.csv" 
+    output:
+        expand("data/plots/confusion_matrix_{kmer}mer.pdf", kmer=config["KMER"]),
+        expand("data/plots/accuracy_{kmer}mer.pdf", kmer=config["KMER"]),
+        expand("data/plots/loss_{kmer}mer.pdf", kmer=config["KMER"]),
+    script: 
+        "plots.py"
+
+## 8. clustering metrics
+rule clustering_metrics:
+    input:
+        "data/test/predictions.csv", 
+        "data/test/embeddings.npy"
+    output: 
+        "data/test/clustering_metrics.csv"
+    run: 
+        "clustering_metrics.py"
+
+## 7. classification metrics
+rule classification_metrics:
+    input:
+        "data/test/predictions.csv", 
+        "data/test/embeddings.npy"
+    output: 
+        "data/test/metrics.csv",
+        "data/test/accuracy.txt",
+        "data/test/curve_pr.pdf"
+    run: 
+        "classification_metrics.py"
+
 ## 6. test model
 rule test_model:
     input: 
@@ -21,7 +55,7 @@ rule train_model:
         "train.py"
 
 ## 4. train, val, test sets
-rule name:
+rule split_data:
     input:
         expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
     output: 
