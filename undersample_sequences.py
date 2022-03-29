@@ -1,4 +1,5 @@
 """Undersample GISAID metadata, select sequences by clade"""
+import yaml
 import random
 from collections import namedtuple, Counter
 from pathlib import Path

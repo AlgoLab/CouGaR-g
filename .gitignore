@@ -1,3 +1,10 @@
+# data
+data/
+
+# snakemake 
+.snakemake/
+dag.svg
+
 # environment
 fcgr-cnn/
 .vscode/

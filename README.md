@@ -1,6 +1,12 @@
-# fcgr-cnn
+# Classification of SARS-CoV-2 sequences using FCGR and CNN
 Frequence Chaos Game Representation with Deep Learning
 
+## Data
++ Sequences and metadata must be downloaded from [GISAID](https://www.gisaid.org/) after creating an account and accepting the Terms of Use. 
++ Reference sequence can be downloaded from [here](https://www.gisaid.org/resources/hcov-19-reference-sequence/).
++ List of variant markers for each clade are save in `mutations_reference.json` and can be found [here](https://www.gisaid.org/resources/statements-clarifications/clade-and-lineage-nomenclature-aids-in-genomic-epidemiology-of-active-hcov-19-viruses/)
+
+## 
 Create a virtual environment and install packages
 ```
 python -m venv env
