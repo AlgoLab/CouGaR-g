@@ -1,5 +1,35 @@
 configfile: "parameters.yaml"
 
+## 12. match relevant kmers
+# shap values
+rule match_relevant_kmers_shap_values:
+    input:
+        expand("data/shap_values/{clade}/relevant_kmers.csv", clade=config["CLADES"]), 
+        config["PATH_REFERENCE_GENOME"],
+        "mutations_reference.json"
+    params:
+        feature_method="shap_values",
+        relevant_kmers_to_match=50
+    output: 
+        expand("data/matches/{feature_method}/{kmer}mers.csv", feature_method="shap_values", kmer=config["KMER"])
+    shell: 
+        "python3 match_relevant_kmers.py {params.feature_method} {params.relevant_kmers_to_match}"
+
+
+# saliency maps
+rule match_relevant_kmers_saliency_map:
+    input:
+        expand("data/saliency_map/{clade}/relevant_kmers.csv", clade=config["CLADES"]), 
+        config["PATH_REFERENCE_GENOME"],
+        "mutations_reference.json"
+    params:
+        feature_method="saliency_map",
+        relevant_kmers_to_match=50
+    output: 
+        expand("data/matches/{feature_method}/{kmer}mers.csv", feature_method="saliency_map", kmer=config["KMER"])
+    shell: 
+        "python3 match_relevant_kmers.py {params.feature_method} {params.relevant_kmers_to_match}"
+
 ## 11. svm experiment
 # shap values
 rule svm_shap_values:
@@ -12,7 +42,6 @@ rule svm_shap_values:
         expand("data/svm/{feature_method}/results_svm_{kmer}mer.csv", feature_method="shap_values", kmer=config["KMER"])
     shell: 
         "python3 svm_experiment.py {params.feature_method}"
-
 
 # saliency map
 rule svm_saliency_map:

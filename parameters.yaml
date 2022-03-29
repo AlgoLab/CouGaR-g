@@ -2,20 +2,19 @@
 KMER: 6
 SPECIE: "hCoV-19"
 
-# Undersample sequences
+# INPUT DATA
 PATH_FASTA_GISAID: "/home/disco/Data/GISAID/sequences_aux.fasta"
 PATH_METADATA: "/home/disco/Data/GISAID/metadata_aux.tsv"
+PATH_REFERENCE_GENOME: "/home/disco/Data/paper-covid19/results/EPI_ISL_402124.fasta"
 CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY'] #['S','L','G','V','GR','GH','GV','GRY']
 SAMPLES_PER_CLADE: 5000
 
-# For training
+# MODEL
 TRAIN_SIZE: 0.8 # size for val and test sets: (1-TRAIN_SIZE)/2
 BATCH_SIZE: 16
 EPOCHS: 50
-# MODEL: f"resnet50_{KMER}mers"
 PREPROCESSING: {"divide_by_max": {}} # ("name_function", dict_kwargs)
 WEIGHTS_PATH: null
-SEED: 42
 
-# FOLDER_FASTA: f"data/{SPECIE}",
-# FOLDER_FCGR: f"fcgr-{KMER}-mer",
+# REPRODUCIBILITY
+SEED: 42
