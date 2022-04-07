@@ -29,6 +29,10 @@ Run
 snakemake -p -c1
 ```
 
+to visualize a DAG with the rules
+```bash
+snakemake --forceall --dag | dot -Tpdf > dag.pdf
+```
 ___
 Snakefile runs codes in this order
 1. `undersample_sequences.py`

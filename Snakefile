@@ -68,7 +68,8 @@ rule svm_saliency_map:
 # shap values
 rule shap:
     input:
-        "data/test/predictions.csv"
+        "data/test/predictions.csv",
+        expand("data/saliency_map/{clade}/representative_FCGR.npy", clade=config["CLADES"]),
     output: 
         expand("data/shap_values/{clade}/relevant_kmers.csv", clade=config["CLADES"]),
         expand("data/shap_values/{clade}/shap_values.npy", clade=config["CLADES"]),

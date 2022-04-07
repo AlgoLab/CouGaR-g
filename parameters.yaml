@@ -5,13 +5,13 @@ SPECIE: "hCoV-19"
 # INPUT DATA
 PATH_FASTA_GISAID: "path/to/sequences.fasta"
 PATH_METADATA: "path/to/metadata.tsv"
-PATH_REFERENCE_GENOME: "data/EPI_ISL_402124.fasta"
+PATH_REFERENCE_GENOME: "/home/jorge/EPI_ISL_402124.fasta"
 CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY','O','GRA']
 SAMPLES_PER_CLADE: 5000
 
 # MODEL
 TRAIN_SIZE: 0.8 # size for val and test sets: (1-TRAIN_SIZE)/2
-BATCH_SIZE: 16
+BATCH_SIZE: 32
 EPOCHS: 50
 PREPROCESSING: {"divide_by_max": {}} # ("name_function", dict_kwargs)
 WEIGHTS_PATH: null

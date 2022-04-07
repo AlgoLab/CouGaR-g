@@ -95,7 +95,7 @@ cb_earlystop = tf.keras.callbacks.EarlyStopping(
     monitor='val_loss',
     mode='min',
     min_delta=0.001,
-    patience=10,
+    patience=12,
     verbose=1
 )
 
