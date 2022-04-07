@@ -4,6 +4,7 @@ data/
 # snakemake 
 .snakemake/
 dag.svg
+dag.pdf
 
 # environment
 fcgr-cnn/

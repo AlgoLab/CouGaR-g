@@ -1,5 +1,15 @@
 configfile: "parameters.yaml"
 
+rule all:
+    input:
+        expand("data/matches/{feature_method}/{kmer}mers.csv", feature_method="shap_values", kmer=config["KMER"]),
+        expand("data/matches/{feature_method}/{kmer}mers.csv", feature_method="saliency_map", kmer=config["KMER"]),
+        expand("data/svm/{feature_method}/results_svm_{kmer}mer.csv", feature_method="shap_values", kmer=config["KMER"]),
+        expand("data/svm/{feature_method}/results_svm_{kmer}mer.csv", feature_method="saliency_map", kmer=config["KMER"]),
+        "data/test/clustering_metrics.csv",
+        "data/test/metrics.csv",
+        expand("data/plots/confusion_matrix_{kmer}mer.pdf", kmer=config["KMER"]),
+
 ## 12. match relevant kmers
 # shap values
 rule match_relevant_kmers_shap_values:
@@ -95,19 +105,19 @@ rule clustering_metrics:
         "data/test/embeddings.npy"
     output: 
         "data/test/clustering_metrics.csv"
-    run: 
+    script: 
         "clustering_metrics.py"
 
 ## 7. classification metrics
 rule classification_metrics:
     input:
+        "data/test/embeddings.npy",
         "data/test/predictions.csv", 
-        "data/test/embeddings.npy"
     output: 
         "data/test/metrics.csv",
         "data/test/accuracy.txt",
         "data/test/curve_pr.pdf"
-    run: 
+    script: 
         "classification_metrics.py"
 
 ## 6. test model
@@ -149,23 +159,23 @@ rule generate_fcgr:
     script:
         "fasta2fcgr.py"
 
-## 2. Extract undersampled sequences in individual fasta files 
-rule extract_sequences:
-    input: 
-        "data/train/undersample_by_clade.csv"
-    output:
-        expand("data/{specie}/extracted_sequences.txt", specie=config["SPECIE"])
-    script: 
-        "extract_sequences.py"
+# ## 2. Extract undersampled sequences in individual fasta files 
+# rule extract_sequences:
+#     input: 
+#         "data/train/undersample_by_clade.csv"
+#     output:
+#         expand("data/{specie}/extracted_sequences.txt", specie=config["SPECIE"])
+#     script: 
+#         "extract_sequences.py"
 
 
-## 1. Undersample sequences from metadata
-rule undersample_sequences:
-    input: 
-        config["PATH_METADATA"],
-    output: 
-        "data/train/undersample_by_clade.csv",
-        "data/train/selected_by_clade.csv",
-        "data/train/available_by_clade.csv",
-    script: 
-        "undersample_sequences.py"
+# ## 1. Undersample sequences from metadata
+# rule undersample_sequences:
+#     input: 
+#         config["PATH_METADATA"],
+#     output: 
+#         "data/train/undersample_by_clade.csv",
+#         "data/train/selected_by_clade.csv",
+#         "data/train/available_by_clade.csv",
+#     script: 
+#         "undersample_sequences.py"

@@ -44,8 +44,8 @@ preprocessing.asJSON("data/train/preprocessing.json")
 # load list of images for train and validation sets
 with open("data/train/datasets.json","r") as f:
     datasets = json.load(f)
-list_train = datasets["train"][:100]
-list_val   = datasets["val"][:100]
+list_train = datasets["train"]
+list_val   = datasets["val"]
 
 ## prepare datasets to feed the model
 # Instantiate DataGenerator for training set
