@@ -25,7 +25,6 @@ rule match_relevant_kmers_shap_values:
     shell: 
         "python3 match_relevant_kmers.py {params.feature_method} {params.relevant_kmers_to_match}"
 
-
 # saliency maps
 rule match_relevant_kmers_saliency_map:
     input:

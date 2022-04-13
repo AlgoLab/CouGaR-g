@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import numpy as np
 import tensorflow as tf
+from sklearn.utils import class_weight
 
 from src.model_loader import ModelLoader
 from src.data_generator import DataGenerator  
@@ -30,11 +31,6 @@ model  = loader(
             n_outputs=len(CLADES),
             weights_path=WEIGHTS_PATH
             ) # get compiled model from ./supervised_dna/models
-
-model.compile(optimizer=tf.keras.optimizers.Adam(),
-            loss="categorical_crossentropy",
-            metrics=["accuracy"]
-)
 
 preprocessing = Pipeline(PREPROCESSING)
 Path("data/train").mkdir(exist_ok=True, parents=True)
@@ -107,6 +103,22 @@ cb_csvlogger = tf.keras.callbacks.CSVLogger(
     append=False
 )
 
+# weighted loss function
+label_from_path = lambda path: path.split("/")[-2]
+labels_train = [label_from_path(path) for path in list_train]
+weights = class_weight.compute_class_weight(
+            "balanced",
+            classes=CLADES,
+            y=labels_train)
+
+# compile model
+model.compile(optimizer=tf.keras.optimizers.Adam(),
+            loss="categorical_crossentropy",
+            metrics=["accuracy"],
+            loss_weights=weights
+)
+
+# train model
 model.fit(
     ds_train,
     validation_data=ds_val,
