@@ -133,22 +133,23 @@ rule test_model:
 ## 5.  train model
 rule train_model:
     input: 
-        "data/train/datasets.json"
+        "data/train/datasets.json",
+        expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"])
     output: 
         "data/train/training_log.csv",
         "data/train/preprocessing.json"
     script: 
         "train.py"
 
-## 4. train, val, test sets
-rule split_data:
-    input:
-        expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
-    output: 
-        "data/train/datasets.json",
-        "data/train/summary_labels.csv"
-    script: 
-        "split_data.py"    
+# ## 4. train, val, test sets
+# rule split_data:
+#     input:
+#         expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
+#     output: 
+#         "data/train/datasets.json",
+#         "data/train/summary_labels.csv"
+#     script: 
+#         "split_data.py"    
 
 ## 3. Generate FCGR
 rule generate_fcgr:

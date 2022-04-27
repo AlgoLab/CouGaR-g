@@ -47,9 +47,8 @@ fcgrpos2kmer = fcgrpos2kmers(k=KMER) # dict with position in FCGR to kmer
 # Load predictions
 predictions = pd.read_csv("data/test/predictions.csv")
 predictions["TP"] = predictions.apply(lambda row: row["ground_truth"] == row["prediction"], axis=1)
-# For each clade, compute the representative FCGR over all TP 
+# For each clade, compute the representative FCGR over all TP
 for clade in tqdm(CLADES): 
-
     # path to save smap and relevant kmers for the clade
     PATH_CLADE = PATH_SMAP.joinpath(clade)
     PATH_CLADE.mkdir(exist_ok=True)
@@ -70,6 +69,8 @@ for clade in tqdm(CLADES):
 
     # compute most relevant kmers
     list_kmers = kmer_importance(smap, 0.1, rep_fcgr, fcgrpos2kmer)
+    if len(list_kmers)==0:
+        list_kmers = kmer_importance(smap, 0, rep_fcgr, fcgrpos2kmer)
     
     np.save(file = PATH_CLADE.joinpath("saliency_map.npy"), arr = smap)
     np.save(file = PATH_CLADE.joinpath("representative_FCGR.npy"), arr = rep_fcgr)
