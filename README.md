@@ -1,6 +1,9 @@
 # Classification of SARS-CoV-2 sequences using FCGR and CNN
 Frequence Chaos Game Representation with Deep Learning
 
+## Try the trained models
+A [web app](https://huggingface.co/spaces/BIASLab/sars-cov-2-classification-fcgr) is available with all the trained models, you just need to upload a fasta file with your sequences
+
 ## Data
 + Sequences and metadata must be downloaded from [GISAID](https://www.gisaid.org/) after creating an account and accepting the Terms of Use. 
 + Reference sequence can be downloaded from [here](https://www.gisaid.org/resources/hcov-19-reference-sequence/).
