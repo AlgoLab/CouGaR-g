@@ -17,8 +17,8 @@ from parameters import PARAMETERS
 
 CLADES = PARAMETERS["CLADES"]
 KMER = PARAMETERS["KMER"]
-MODEL = PARAMETERS["MODEL"]
-PREPROCESSING = PARAMETERS["PREPROCESSING"]
+PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
+MODEL_NAME  = f"resnet50_{KMER}mers"
 
 # get best weights
 CHECKPOINTS  = [str(path) for path in Path("data/train/checkpoints").rglob("*.hdf5")]
@@ -35,7 +35,7 @@ for clade in CLADES:
 
 # load model 
 loader = ModelLoader()
-model = loader(model_name = MODEL,
+model = loader(model_name = MODEL_NAME,
                n_outputs  = len(CLADES),
                weights_path = BEST_WEIGHTS
             )

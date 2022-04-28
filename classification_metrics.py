@@ -25,7 +25,8 @@ precision, recall, fscore, support = precision_recall_fscore_support(
                                     y_true=gt, 
                                     y_pred=preds, 
                                     average=None, 
-                                    labels=CLADES
+                                    labels=CLADES,
+                                    zero_division=0
                                     )
 
 list_metrics = []
@@ -91,3 +92,4 @@ for i, color, linestyle in zip(CLADES, colors, linestyle_tuple):
     )
     display.plot(ax=ax, name=f"Precision-recall for clade {i}", color=color, linestyle = linestyle[1])
 plt.savefig("data/test/curve_pr.jpg")
+plt.savefig("data/test/curve_pr.pdf")

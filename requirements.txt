@@ -7,3 +7,5 @@ pillow
 matplotlib
 shap
 opencv-python
+snakemake
+pyyaml

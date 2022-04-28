@@ -9,7 +9,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 from parameters import PARAMETERS
 KMER = PARAMETERS["KMER"]
-PATH = Path(f"/home/disco/Data/paper-covid19/results/train-{KMER}mers/data")
+PATH = Path("data")
 PATH_PLOTS = PATH.joinpath("plots")
 PATH_PLOTS.mkdir(exist_ok=True, parents=True)
 

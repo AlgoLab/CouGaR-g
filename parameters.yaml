@@ -1,0 +1,20 @@
+# General
+KMER: 8
+SPECIE: "hCoV-19"
+
+# INPUT DATA
+PATH_FASTA_GISAID: "/home/jorge/GISAID/sequences.fasta"
+PATH_METADATA: "/home/jorge/GISAID/metadata.tsv"
+PATH_REFERENCE_GENOME: "/home/jorge/EPI_ISL_402124.fasta"
+CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY','O','GRA']
+SAMPLES_PER_CLADE: 20000
+
+# MODEL
+TRAIN_SIZE: 0.8 # size for val and test sets: (1-TRAIN_SIZE)/2
+BATCH_SIZE: 16
+EPOCHS: 50
+PREPROCESSING: {"divide_by_max": {}} # ("name_function", dict_kwargs)
+WEIGHTS_PATH: null
+
+# REPRODUCIBILITY
+SEED: 42

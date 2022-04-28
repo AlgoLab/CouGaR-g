@@ -11,9 +11,10 @@ from preprocessing import Pipeline
 from parameters import PARAMETERS
 
 KMER = PARAMETERS["KMER"]
-MODEL_NAME = PARAMETERS["MODEL"]
 CLADES     = PARAMETERS["CLADES"] # order output model
-PREPROCESSING = PARAMETERS["PREPROCESSING"]
+PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
+
+MODEL_NAME  = f"resnet50_{KMER}mers"
 
 # get best weights
 CHECKPOINTS  = [str(path) for path in Path("data/train/checkpoints").rglob("*.hdf5")]
@@ -32,7 +33,7 @@ model = loader(model_name = MODEL_NAME,
 preprocessing = Pipeline(PREPROCESSING)
             
 # Option 2: from a list of files (test set)
-with open("datasets.json", "r") as fp:
+with open("data/train/datasets.json", "r") as fp:
     dataset = json.load(fp)
 list_test = dataset["test"]
 

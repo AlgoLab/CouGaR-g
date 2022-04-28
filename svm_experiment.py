@@ -1,3 +1,4 @@
+import sys
 import json 
 import numpy as np 
 import pandas as pd
@@ -14,6 +15,8 @@ from sklearn.metrics import accuracy_score
 from src.utils import fcgrpos2kmers
 from parameters import PARAMETERS
 
+feature_from = sys.argv[1] #"shap_values"
+
 # base parameters
 #minN, maxN = 1,15 # Number of relevant kmers to try
 rangeN = [1,2,3,4,5,10,15,20,25,30,35,40,45,50]
@@ -21,12 +24,10 @@ CLADES = PARAMETERS["CLADES"]#['S','L','G','V','GR','GH','GV','GK','GRY']
 KMER = PARAMETERS["KMER"]
 kmer2pos = {kmer: pos for pos,kmer in fcgrpos2kmers(KMER).items()}
 
-feature_from = "shap_values"
-
 BASE_PATH = Path(f"data")
 
 # load datasets
-with open("datasets.json","r") as fp: 
+with open("data/train/datasets.json","r") as fp: 
     datasets = json.load(fp)
     
 # add complete path to fcgr

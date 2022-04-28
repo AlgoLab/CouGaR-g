@@ -17,10 +17,9 @@ from preprocessing import Pipeline
 from parameters import PARAMETERS
 
 KMER = PARAMETERS["KMER"]
-MODEL_NAME = PARAMETERS["MODEL"]
 CLADES     = PARAMETERS["CLADES"] # order output model
-PREPROCESSING = PARAMETERS["PREPROCESSING"]
-
+PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
+MODEL_NAME  = f"resnet50_{KMER}mers"
 PATH_SMAP = Path("data/saliency_map")
 PATH_SMAP.mkdir(exist_ok=True)
 
@@ -48,9 +47,8 @@ fcgrpos2kmer = fcgrpos2kmers(k=KMER) # dict with position in FCGR to kmer
 # Load predictions
 predictions = pd.read_csv("data/test/predictions.csv")
 predictions["TP"] = predictions.apply(lambda row: row["ground_truth"] == row["prediction"], axis=1)
-# For each clade, compute the representative FCGR over all TP 
+# For each clade, compute the representative FCGR over all TP
 for clade in tqdm(CLADES): 
-
     # path to save smap and relevant kmers for the clade
     PATH_CLADE = PATH_SMAP.joinpath(clade)
     PATH_CLADE.mkdir(exist_ok=True)
@@ -63,7 +61,7 @@ for clade in tqdm(CLADES):
     for path in paths_tp_clade: 
         fcgr = np.load(path)
         rep_fcgr = np.add(rep_fcgr, fcgr)
-    rep_fcgr = rep_fcgr/len(paths_tp_clade)
+    rep_fcgr = rep_fcgr/len(paths_tp_clade) 
 
     # compute saliency map for the representative FCGR
     input_model = np.expand_dims(preprocessing(rep_fcgr), axis=0)
@@ -71,6 +69,8 @@ for clade in tqdm(CLADES):
 
     # compute most relevant kmers
     list_kmers = kmer_importance(smap, 0.1, rep_fcgr, fcgrpos2kmer)
+    if len(list_kmers)==0:
+        list_kmers = kmer_importance(smap, 0, rep_fcgr, fcgrpos2kmer)
     
     np.save(file = PATH_CLADE.joinpath("saliency_map.npy"), arr = smap)
     np.save(file = PATH_CLADE.joinpath("representative_FCGR.npy"), arr = rep_fcgr)

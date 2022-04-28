@@ -1,29 +1,68 @@
-# fcgr-cnn
+# Classification of SARS-CoV-2 sequences using FCGR and CNN
 Frequence Chaos Game Representation with Deep Learning
 
-Create a virtual environment and install packages
+## Data
++ Sequences and metadata must be downloaded from [GISAID](https://www.gisaid.org/) after creating an account and accepting the Terms of Use. 
++ Reference sequence can be downloaded from [here](https://www.gisaid.org/resources/hcov-19-reference-sequence/).
++ List of variant markers for each clade are save in `mutations_reference.json` and can be found [here](https://www.gisaid.org/resources/statements-clarifications/clade-and-lineage-nomenclature-aids-in-genomic-epidemiology-of-active-hcov-19-viruses/)
+
+**Before running the snakemake file, make sure to add them to `parameters.yaml`**
+```yaml
+PATH_FASTA_GISAID: "path/to/sequences.fasta"
+PATH_METADATA: "path/to/metadata.tsv"
+PATH_REFERENCE_GENOME: "path/to/reference.fasta"
 ```
+
+## 
+Create a virtual environment and install packages
+```bash
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Set parameters for the experiment in `parameters.py`
+Set parameters for the experiment in `parameters.yaml`
 - See (and include) preprocessing functions at `preprocessing.py`
 
-Run codes in this order
+Run
+```bash
+snakemake -p -c1
+```
+
+to visualize a DAG with the rules
+```bash
+snakemake --forceall --dag | dot -Tpdf > dag.pdf
+```
+___
+Snakefile runs codes in this order
 1. `undersample_sequences.py`
-2. `extract_sequences.py`
-3. `fasta2fcgr`
-3. `split_data.py` will create a file `datasets.json` with train, validation and test sets
-4. `train.py`
+2. `extract_sequences.py` (extract each undersample sequence in individuals fasta files)
+3. `fasta2fcgr` (generates a npy file with the $k$th-FCGR for each extracted sequence in the previous step)
+3. `split_data.py` (will create a file `datasets.json` with train, validation and test sets)
+4. `train.py` (train the model for the $k$-mer selected)
 5. `test.py`
-6. `classification_metrics.py` 
-7. `clustering_metrics.py` 
-8. `plots.py`
+6. `classification_metrics.py` (computes accuracy, precision, recall and f1-score) 
+7. `clustering_metrics.py` (computes Silhouette score, Calinski-Harabaz and Generalized Discrimination Value in the test set)
+8. `plots.py` (generates plot for accuracy and loss in the training and validation sets. Confusion matrix for the test set)
+9. `saliency_map.py` and `shap_values.py` (feature importance methods)
+10. `svm_experiment.py` (train a SVM using subsets of relevant kmers chosen by the feature importance methods)
+11. `match_relevant_kmers.py` (match relevant kmers chose by the feature importance methods to the list of marker variants for each clade)
 
 A folder `data/` will be created to save all intermediate results: 
-- `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 
+```
+data/
+├── fcgr-6-mer
+├── hCoV-19
+├── matches
+├── plots
+├── saliency_map
+├── shap_values
+├── svm
+├── test
+└── train
+```
+
+<!-- - `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 
 - `train/` will contain 
     - `undersample_by_clade.csv`
     - `available_by_clade.csv` a summary of the available sequences by clade, subject to the restrictions made in `undersample_sequences.py`(remove duplicates and empty rows)
@@ -35,4 +74,4 @@ A folder `data/` will be created to save all intermediate results:
     - `plots` accuracy and loss plots during training, confusion matrix
     - `saliency_maps/` representative FCGR by clade, saliency map and relevant k-mers for that representative.
 
-A folder `fcgr-<KMER>-mer/` will contain all the FCGR created from the sequences in `data/<SPECIE>` 
+A folder `fcgr-<KMER>-mer/` will contain all the FCGR created from the sequences in `data/<SPECIE>`  -->
