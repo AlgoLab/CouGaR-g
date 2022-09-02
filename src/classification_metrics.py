@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 from itertools import cycle 
 from collections import namedtuple
+# TODO: add AUC and MCC
 from sklearn.metrics import (
     precision_recall_curve, # must be applied to each class independently
     average_precision_score,
@@ -20,7 +21,7 @@ conf  = predictions.confidence # confidence: probability given by argmax over th
 preds = predictions.prediction # predictions: clade with the highest confidence
 gt    = predictions.ground_truth # ground-truth: real clade
 
-# metrics precision and recall 
+# metrics precision and recall
 precision, recall, fscore, support = precision_recall_fscore_support(
                                     y_true=gt, 
                                     y_pred=preds, 

@@ -5,8 +5,6 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from tensorflow.python.eager.context import num_gpus
-
 OMMIT = {".ipynb_checkpoints","__pycache__","__init__","custom_layers","custom_losses"} # files to be ommited
 BASE_DIR = Path(__file__).resolve().parent # base directory unsupervised-dna
 BASE_MODELS = BASE_DIR.joinpath("models") # models directory

@@ -28,7 +28,7 @@ def find_matches(relevant_kmers, subseq, clade, mutation):
     return list_matches
 
 # load mutations
-with open("mutations_reference.json") as fp: 
+with open("../mutations_reference.json") as fp: 
     mutations = json.load(fp)
 
 # Reference sequence

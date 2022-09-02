@@ -6,10 +6,10 @@ import pandas as pd
 
 from tqdm import tqdm
 from pathlib import Path
-from src.fcgr import FCGR
-from src.model_loader import ModelLoader
-from src.saliency_maps import saliencymap
-from src.utils import (
+from fcgr.fcgr import FCGR
+from loaders.model_loader import ModelLoader
+from feature_importance.saliency_maps import saliencymap
+from fcgr.utils import (
     fcgrpos2kmers, 
     kmer_importance,
 )

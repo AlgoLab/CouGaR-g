@@ -5,8 +5,8 @@ import pandas as pd
 from tqdm import tqdm
 from collections import namedtuple
 from pathlib import Path
-from src.model_loader import ModelLoader
-from src.data_generator import DataGenerator  
+from loaders.model_loader import ModelLoader
+from loaders.data_generator import DataGenerator  
 from preprocessing import Pipeline
 from parameters import PARAMETERS
 

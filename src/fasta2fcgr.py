@@ -1,7 +1,7 @@
 """Create and FCGR.npy for each sequence.fasta in a folder"""
 from pathlib import Path
 from parameters import PARAMETERS
-from src.generate_fcgr import GenerateFCGR
+from fcgr.generate_fcgr import GenerateFCGR
 
 SPECIE = PARAMETERS["SPECIE"]
 FOLDER_FASTA = Path(f"data/{SPECIE}") 

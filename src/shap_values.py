@@ -7,8 +7,8 @@ import numpy as np
 import shap 
 
 from pathlib import Path
-from src.model_loader import ModelLoader
-from src.utils import (
+from loaders.model_loader import ModelLoader
+from fcgr.utils import (
     fcgrpos2kmers,
     kmer_importance_shap
 )

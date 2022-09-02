@@ -1,5 +1,5 @@
 """All functions that can be applied as preprocessing"""
-from src.pipeline import (
+from preprocessing.pipeline import (
     register_in_pipeline, # decorator to make available a function to use with Pipeline class
     Pipeline,
 )
