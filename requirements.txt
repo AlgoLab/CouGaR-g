@@ -9,3 +9,4 @@ shap
 snakemake
 pyyaml
 opencv-python
+dvc
