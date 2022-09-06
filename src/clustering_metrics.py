@@ -7,7 +7,7 @@ from sklearn.metrics import (
     #silhouette_samples,
     calinski_harabasz_score,
 )
-from .metrics.clustering_metrics import GeneralizedDiscriminationValue as GDV
+from metrics.clustering_metrics import GeneralizedDiscriminationValue as GDV
 
 from parameters import PARAMETERS
 CLADES = PARAMETERS["CLADES"]
