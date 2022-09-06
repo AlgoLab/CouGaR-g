@@ -5,12 +5,10 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from tensorflow.python.eager.context import num_gpus
-
 OMMIT = {".ipynb_checkpoints","__pycache__","__init__","custom_layers","custom_losses"} # files to be ommited
-BASE_DIR = Path(__file__).resolve().parent # base directory unsupervised-dna
+BASE_DIR = Path(__file__).resolve().parent.parent # base directory unsupervised-dna
 BASE_MODELS = BASE_DIR.joinpath("models") # models directory
-
+print(BASE_DIR, BASE_MODELS)
 class ModelLoader:
     "Load models for unsupervised learning using FCGR (grayscale images)"
 
@@ -22,7 +20,7 @@ class ModelLoader:
         # Call class of model to load
         get_model = getattr(
             importlib.import_module(
-                f"src.models.{model_name}"
+                f"models.{model_name}"
             ),
             "get_model")        
         

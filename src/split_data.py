@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from parameters import PARAMETERS
 from pathlib import Path
-from src.data_selector import DataSelector
+from data_selector import DataSelector
 
 # Select all data
 KMER = PARAMETERS["KMER"] 

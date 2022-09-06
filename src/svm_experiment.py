@@ -12,7 +12,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
-from src.utils import fcgrpos2kmers
+from fcgr.utils import fcgrpos2kmers
 from parameters import PARAMETERS
 
 feature_from = sys.argv[1] #"shap_values"
