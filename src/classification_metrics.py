@@ -4,14 +4,16 @@ import matplotlib.pyplot as plt
 
 from itertools import cycle 
 from collections import namedtuple
-# TODO: add AUC and MCC
+# TODO: add AUC
 from sklearn.metrics import (
     precision_recall_curve, # must be applied to each class independently
     average_precision_score,
     precision_recall_fscore_support, # retrieve precision and recall
     accuracy_score,
-    PrecisionRecallDisplay
+    PrecisionRecallDisplay,
+    confusion_matrix,
 )
+from src.metrics.matthews_corrcoef import mcc
 from parameters import PARAMETERS
 
 # load predictions
@@ -40,12 +42,19 @@ for j,clade in enumerate(CLADES):
 df_metrics = pd.DataFrame(list_metrics)
 df_metrics.to_csv("data/test/metrics.csv")
 
+# accuracy
 accuracy = accuracy_score( 
     y_true = gt,
     y_pred = preds
 )
-with open("data/test/accuracy.txt","w") as fp:
+
+# Matthews coefficient
+cm = confusion_matrix(y_true=gt, y_pred=preds)
+m_coeff = mcc(cm)
+
+with open("data/test/accuracy-mcc.txt","w") as fp:
     fp.write(f"Accuracy {accuracy}")
+    fp.write(f"Matthews Correlation Coefficient {m_coeff}")
 
 
 ## Curve Precision Recall
@@ -62,6 +71,8 @@ for j,clade in enumerate(CLADES):
     y_score = embeddings[:,j] # probabilities for the clade
     precision[clade], recall[clade], _ = precision_recall_curve(y_true, y_score, pos_label = clade)
     #average_precision[clade] = average_precision_score(y_true, y_score, pos_label=clade)
+
+# -----------------------------------
 
 # Plot
 linestyle_tuple = [
