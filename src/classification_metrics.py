@@ -57,8 +57,15 @@ accuracy = accuracy_score(
 cm = confusion_matrix(y_true=gt, y_pred=preds)
 m_coeff = mcc(cm)
 
+# load probabilities
+embeddings = np.load(f"data/test-{KFOLD}/embeddings.npy")
+
 # auc score
-auc = roc_auc_score(y_true=gt, y_pred=preds, multi_class='ovo')
+gt_hotencode = np.zeros((len(gt), len(CLADES)))
+for j,y in enumerate(gt):
+    col = CLADES.index(y)
+    gt_hotencode[j,col] = 1
+auc = roc_auc_score(y_true=gt_hotencode, y_pred=embeddings, multi_class='ovo')
 
 with open(f"data/test-{KFOLD}/global_metrics.json","w") as fp:
     json.dump(
@@ -72,8 +79,6 @@ with open(f"data/test-{KFOLD}/global_metrics.json","w") as fp:
     )
 
 ## Curve Precision Recall
-# load probabilities 
-embeddings = np.load(f"data/test-{KFOLD}/embeddings.npy")
 
 # Compute precision recall curve for each clade
 precision = dict()
