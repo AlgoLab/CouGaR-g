@@ -3,7 +3,12 @@ Random Forest and SVM for classification of SarsCov2
 """
 configfile: "parameters.yaml"
 
-KFOLD=5
+KFOLD=config["KFOLD"]
+
+rule all:
+    input:
+        f"data/rf-svm/metrics-svm.tsv",
+        f"data/rf-svm/metrics-rf.tsv"
 
 rule train_rf:
     input: 
@@ -11,9 +16,9 @@ rule train_rf:
     params:
         kfold=KFOLD
     output: 
-        f"data/rf-svm/metrics-rf.csv",
-    script: 
-        "src/cv_random_forest.py {params.kfold}"
+        "data/rf-svm/metrics-rf.tsv",
+    shell: 
+        "python3 src/cv_random_forest.py {params.kfold}"
 
 rule train_svm:
     input: 
@@ -21,7 +26,6 @@ rule train_svm:
     params:
         kfold=KFOLD
     output: 
-        f"data/train-rf/preprocessing-rf.json"
-    script: 
-        "src/cv_random_forest.py {params.kfold}"
-
+        "data/rf-svm/metrics-svm.tsv"
+    shell: 
+        "python3 src/cv_svm.py {params.kfold}"
