@@ -60,10 +60,10 @@ def build_io_svm(paths_fcgr):
         
     return pd.DataFrame(freqs_fcgr).numpy(), np.array(labels)
 
-def build_io_svm(paths_fcgr):
-    "Auxiliar function to generate random datasets"
-    N = 1000
-    return np.random.rand(N,KMER**2), np.array([random.choice(CLADES) for _ in range(N)]) 
+# def build_io_svm(paths_fcgr):
+#     "Auxiliar function to generate random datasets"
+#     N = 1000
+#     return np.random.rand(N,KMER**2), np.array([random.choice(CLADES) for _ in range(N)]) 
 
 # cross validation
 X,y = build_io_svm(LIST_FASTA) # input-output
