@@ -1,10 +1,12 @@
+import sys
+import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from itertools import cycle 
 from collections import namedtuple
-# TODO: add AUC
+
 from sklearn.metrics import (
     precision_recall_curve, # must be applied to each class independently
     average_precision_score,
@@ -12,13 +14,16 @@ from sklearn.metrics import (
     accuracy_score,
     PrecisionRecallDisplay,
     confusion_matrix,
+    roc_auc_score, # use multiclass='ovo' 
 )
 from src.metrics.matthews_corrcoef import mcc
 from parameters import PARAMETERS
 
+KFOLD=sys.argv[-1]
+
 # load predictions
 CLADES = PARAMETERS["CLADES"]
-predictions = pd.read_csv("data/test/predictions.csv")
+predictions = pd.read_csv(f"data/test-{KFOLD}/predictions.csv")
 conf  = predictions.confidence # confidence: probability given by argmax over the output of the model
 preds = predictions.prediction # predictions: clade with the highest confidence
 gt    = predictions.ground_truth # ground-truth: real clade
@@ -40,7 +45,7 @@ for j,clade in enumerate(CLADES):
     )
 
 df_metrics = pd.DataFrame(list_metrics)
-df_metrics.to_csv("data/test/metrics.csv")
+df_metrics.to_csv(f"data/test-{KFOLD}/metrics.csv")
 
 # accuracy
 accuracy = accuracy_score( 
@@ -52,25 +57,32 @@ accuracy = accuracy_score(
 cm = confusion_matrix(y_true=gt, y_pred=preds)
 m_coeff = mcc(cm)
 
-with open("data/test/accuracy-mcc.txt","w") as fp:
-    fp.write(f"Accuracy {accuracy}")
-    fp.write(f"Matthews Correlation Coefficient {m_coeff}")
+# auc score
+auc = roc_auc_score(y_true=gt, y_pred=preds, multi_class='ovo')
 
+with open(f"data/test-{KFOLD}/global_metrics.json","w") as fp:
+    json.dump(
+        {
+            "acc": accuracy,
+            "mcc": m_coeff,
+            "auc": auc
+        },
+        fp,
+        indent=4
+    )
 
 ## Curve Precision Recall
 # load probabilities 
-embeddings = np.load("data/test/embeddings.npy")
+embeddings = np.load(f"data/test-{KFOLD}/embeddings.npy")
 
 # Compute precision recall curve for each clade
 precision = dict()
 recall = dict()
 average_precision = dict()
 for j,clade in enumerate(CLADES):
-    #y_true  = [1 if pred==clade else 0 for pred in predictions.ground_truth] # prec-recall requires binary labels
     y_true = predictions.ground_truth
     y_score = embeddings[:,j] # probabilities for the clade
     precision[clade], recall[clade], _ = precision_recall_curve(y_true, y_score, pos_label = clade)
-    #average_precision[clade] = average_precision_score(y_true, y_score, pos_label=clade)
 
 # -----------------------------------
 
@@ -100,8 +112,7 @@ for i, color, linestyle in zip(CLADES, colors, linestyle_tuple):
     display = PrecisionRecallDisplay(
         recall=recall[i],
         precision=precision[i],
-        #average_precision=average_precision[i],
     )
     display.plot(ax=ax, name=f"Precision-recall for clade {i}", color=color, linestyle = linestyle[1])
-plt.savefig("data/test/curve_pr.jpg")
-plt.savefig("data/test/curve_pr.pdf")
+plt.savefig(f"data/test-{KFOLD}/curve_pr.jpg")
+plt.savefig(f"data/test-{KFOLD}/curve_pr.pdf")

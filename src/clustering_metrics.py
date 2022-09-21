@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 import numpy as np 
 from itertools import combinations
@@ -10,6 +11,8 @@ from sklearn.metrics import (
 from metrics.clustering_metrics import GeneralizedDiscriminationValue as GDV
 
 from parameters import PARAMETERS
+
+KFOLD = sys.argv[-1]
 CLADES = PARAMETERS["CLADES"]
 
 predictions = pd.read_csv("data/test/predictions.csv")

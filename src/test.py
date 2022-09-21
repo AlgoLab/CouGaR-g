@@ -10,6 +10,7 @@ from loaders.data_generator import DataGenerator
 from preprocessing import Pipeline
 from parameters import PARAMETERS
 
+KFOLD = sys.argv[-1]
 KMER = PARAMETERS["KMER"]
 CLADES     = PARAMETERS["CLADES"] # order output model
 PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
@@ -17,7 +18,7 @@ PREPROCESSING = [(k,v) for k,v in PARAMETERS["PREPROCESSING"].items()]
 MODEL_NAME  = f"resnet50_{KMER}mers"
 
 # get best weights
-CHECKPOINTS  = [str(path) for path in Path("data/train/checkpoints").rglob("*.hdf5")]
+CHECKPOINTS  = [str(path) for path in Path(f"data/train-{KFOLD}/checkpoints").rglob("*.hdf5")]
 epoch_from_chkp = lambda chkp: int(chkp.split("/")[-1].split("-")[1])
 CHECKPOINTS.sort(key = epoch_from_chkp)
 BEST_WEIGHTS =  CHECKPOINTS[-1]
@@ -33,7 +34,7 @@ model = loader(model_name = MODEL_NAME,
 preprocessing = Pipeline(PREPROCESSING)
             
 # Option 2: from a list of files (test set)
-with open("data/train/datasets.json", "r") as fp:
+with open(f"data/train-{KFOLD}/datasets.json", "r") as fp:
     dataset = json.load(fp)
 list_test = dataset["test"]
 
@@ -73,7 +74,7 @@ for path, (input_model, labels_model) in tqdm(zip(list_test,iter(ds_test)),total
     list_emb.append(probs)
 
 # Save results
-path_save = Path("data/test")
+path_save = Path(f"data/test-{KFOLD}")
 path_save.mkdir(exist_ok=True)
 
 pd.DataFrame(list_preds).to_csv(path_save.joinpath("predictions.csv"))

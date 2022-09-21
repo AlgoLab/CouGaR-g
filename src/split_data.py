@@ -1,4 +1,6 @@
+
 """Divide FCGR generated into train, validation and test sets"""
+import sys
 import json
 import pandas as pd
 from parameters import PARAMETERS
@@ -6,6 +8,7 @@ from pathlib import Path
 from data_selector import DataSelector
 
 # Select all data
+KFOLD=sys.argv[-1]
 KMER = PARAMETERS["KMER"] 
 FOLDER_FCGR = Path(f"data/fcgr-{KMER}-mer")
 LIST_FASTA   = list(FOLDER_FCGR.rglob("*npy"))
@@ -19,16 +22,16 @@ labels    = [path.parent.stem for path in LIST_FASTA]
 ds = DataSelector(
     id_labels,
     labels,
-    SEED
+    seed=int(KFOLD)+SEED
     )
 
 # Get train, test and val sets
 ds(train_size=TRAIN_SIZE, balanced_on=labels)
 
-with open("data/train/datasets.json", "w", encoding="utf-8") as f: 
+with open(f"data/train-{KFOLD}/datasets.json", "w", encoding="utf-8") as f: 
     json.dump(ds.datasets["id_labels"], f, ensure_ascii=False, indent=4)
 
 # Summary of data selected 
 summary_labels =  pd.DataFrame(ds.get_summary_labels())
 summary_labels["Total"] = summary_labels.sum(axis=1)
-summary_labels.to_csv("data/train/summary_labels.csv")
+summary_labels.to_csv(f"data/train-{KFOLD}/summary_labels.csv")
