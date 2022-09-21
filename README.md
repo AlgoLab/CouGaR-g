@@ -27,14 +27,35 @@ pip install -r requirements.txt
 Set parameters for the experiment in `parameters.yaml`
 - See (and include) preprocessing functions at `preprocessing.py`
 
-Run
+## Run
+
+**Undersample sequences and generate FCGR** 
 ```bash
-snakemake -p -c1
+snakemake -s rf_dataset.smk -p -c1
+```
+
+**Train 5 different neural networks. KFOLD will define the SEED for Repeated-KFold**
+For this case KFOLD is an integer defining a different randomization of the datasets
+for each KFOLD a different train, val and test sets will be generated, saved and used for training
+```bash
+snakemake -s crossval_nn.smk --config KFOLD=1 -p -c1
+snakemake -s crossval_nn.smk --config KFOLD=2 -p -c1
+snakemake -s crossval_nn.smk --config KFOLD=3 -p -c1
+snakemake -s crossval_nn.smk --config KFOLD=4 -p -c1
+snakemake -s crossval_nn.smk --config KFOLD=5 -p -c1
+```
+
+**Train SVM and Random Forest with Cross Validation, 5-fold**
+In this case, using sklearn, KFOLD is the number of folds we want to use, the random datasets are selected internally
+```bash
+snakemake -s rf_svm.smk --config KFOLD=5 -p -c1
 ```
 
 to visualize a DAG with the rules
 ```bash
-snakemake --forceall --dag | dot -Tpdf > dag.pdf
+snakemake -s dataset.smk --forceall --dag | dot -Tpdf > dag_dataset.pdf
+snakemake -s crossval_nn.smk --forceall --dag | dot -Tpdf > dag_crossval_nn.pdf
+snakemake -s rf_svm.smk --forceall --dag | dot -Tpdf > dag_rf-svm.pdf
 ```
 ___
 Snakefile runs codes in this order
@@ -62,7 +83,8 @@ data/
 ├── shap_values
 ├── svm
 ├── test
-└── train
+├── train
+└── rf-svm
 ```
 
 <!-- - `<SPECIE>/` with all sequences extracted individually in the fasta file, in separated folders by label (Clade) 
@@ -76,5 +98,5 @@ data/
     - `test/` will save all the metrics (classification and clustering) resulting from the evaluation of the best model on the test set.
     - `plots` accuracy and loss plots during training, confusion matrix
     - `saliency_maps/` representative FCGR by clade, saliency map and relevant k-mers for that representative.
-
+- `rf-svm/` will contain metrics for SVM and RF
 A folder `fcgr-<KMER>-mer/` will contain all the FCGR created from the sequences in `data/<SPECIE>`  -->
