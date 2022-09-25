@@ -70,8 +70,9 @@ ds_val = DataGenerator(
 # - Callbacks
 # checkpoint: save best weights
 Path(f"data/train-{KFOLD}/checkpoints").mkdir(exist_ok=True, parents=True)
+PATH_CHKPT = Path(f"data/train-{KFOLD}/checkpoints")
 cb_checkpoint = tf.keras.callbacks.ModelCheckpoint(
-    filepath=f"data/train-{KFOLD}/checkpoints/model-{epoch:02d}-{val_accuracy:.3f}.hdf5",
+    filepath=PATH_CHKPT.joinpath("model-{epoch:02d}-{val_accuracy:.3f}.hdf5"),
     monitor="val_loss",
     mode="min",
     save_best_only=True,

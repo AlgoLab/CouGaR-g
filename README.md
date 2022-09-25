@@ -31,7 +31,7 @@ Set parameters for the experiment in `parameters.yaml`
 
 **Undersample sequences and generate FCGR** 
 ```bash
-snakemake -s rf_dataset.smk -p -c1
+snakemake -s dataset.smk -p -c1
 ```
 
 **Train 5 different neural networks. KFOLD will define the SEED for Repeated-KFold**

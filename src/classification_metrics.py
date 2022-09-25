@@ -14,9 +14,8 @@ from sklearn.metrics import (
     accuracy_score,
     PrecisionRecallDisplay,
     confusion_matrix,
-    roc_auc_score, # use multiclass='ovo' 
 )
-from src.metrics.matthews_corrcoef import mcc
+from metrics.matthews_corrcoef import mcc
 from parameters import PARAMETERS
 
 KFOLD=sys.argv[-1]
@@ -60,19 +59,11 @@ m_coeff = mcc(cm)
 # load probabilities
 embeddings = np.load(f"data/test-{KFOLD}/embeddings.npy")
 
-# auc score
-gt_hotencode = np.zeros((len(gt), len(CLADES)))
-for j,y in enumerate(gt):
-    col = CLADES.index(y)
-    gt_hotencode[j,col] = 1
-auc = roc_auc_score(y_true=gt_hotencode, y_pred=embeddings, multi_class='ovo')
-
 with open(f"data/test-{KFOLD}/global_metrics.json","w") as fp:
     json.dump(
         {
             "acc": accuracy,
-            "mcc": m_coeff,
-            "auc": auc
+            "mcc": m_coeff
         },
         fp,
         indent=4

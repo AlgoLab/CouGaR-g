@@ -15,8 +15,8 @@ from parameters import PARAMETERS
 KFOLD = sys.argv[-1]
 CLADES = PARAMETERS["CLADES"]
 
-predictions = pd.read_csv("data/test/predictions.csv")
-embeddings  = np.load("data/test/embeddings.npy")
+predictions = pd.read_csv(f"data/test-{KFOLD}/predictions.csv")
+embeddings  = np.load(f"data/test-{KFOLD}/embeddings.npy")
 
 labels = predictions.prediction
 
@@ -35,4 +35,4 @@ clust_metrics = {
     "calinski_harabasz": global_calinski_harabasz,
     "GDV": global_gdv
 }
-pd.DataFrame.from_dict(clust_metrics, orient='index').T.to_csv("data/test/clustering_metrics.csv")
+pd.DataFrame.from_dict(clust_metrics, orient='index').T.to_csv(f"data/test-{KFOLD}/clustering_metrics.csv")

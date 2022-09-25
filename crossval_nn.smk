@@ -18,8 +18,8 @@ rule clustering_metrics:
         kfold=KFOLD
     output: 
         f"data/test-{KFOLD}/clustering_metrics.csv"
-    script: 
-        "src/clustering_metrics.py {params.kfold}"
+    shell: 
+        "python src/clustering_metrics.py {params.kfold}"
 
 ## 7. classification metrics
 rule classification_metrics:
@@ -32,8 +32,8 @@ rule classification_metrics:
         f"data/test-{KFOLD}/metrics.csv",
         f"data/test-{KFOLD}/global_metrics.json",
         f"data/test-{KFOLD}/curve_pr.pdf"
-    script: 
-        "src/classification_metrics.py {params.kfold}"
+    shell: 
+        "python src/classification_metrics.py {params.kfold}"
 
 ## 6. test model
 rule test_model:
@@ -45,8 +45,8 @@ rule test_model:
     output: 
         f"data/test-{KFOLD}/embeddings.npy",
         f"data/test-{KFOLD}/predictions.csv"
-    script: 
-        "src/test.py {params.kfold}"
+    shell: 
+        "python src/test.py {params.kfold}"
 
 ## 5.  train model
 rule train_model:
@@ -58,17 +58,17 @@ rule train_model:
     output: 
         f"data/train-{KFOLD}/training_log.csv",
         f"data/train-{KFOLD}/preprocessing.json"
-    script: 
-        "src/train.py {params.kfold}"
+    shell: 
+        "python src/train.py {params.kfold}"
 
 ## 4. train, val, test sets
 rule split_data:
-    # input:
-    #     expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
+    input:
+        expand("data/fcgr-{kmer}-mer/generated_fcgr.txt", kmer=config["KMER"]), 
     params:
         kfold=KFOLD
     output: 
         f"data/train-{KFOLD}/datasets.json",
         f"data/train-{KFOLD}/summary_labels.csv"
-    script: 
-        "src/split_data.py {params.kfold}"    
+    shell: 
+        "python src/split_data.py {params.kfold}"    

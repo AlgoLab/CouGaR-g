@@ -2,7 +2,9 @@
 Use repeated kfold 
 """
 import sys
-import tqdm 
+import json
+from tqdm import tqdm 
+import time 
 import random
 import numpy as np
 import pandas as pd
@@ -17,7 +19,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import ShuffleSplit, RepeatedKFold, cross_val_score, cross_val_predict
 
 from sklearn.metrics import (
-    roc_auc_score,
     confusion_matrix,
     accuracy_score
 )
@@ -37,7 +38,7 @@ PATH_SAVE = Path("data/rf-svm")
 PATH_SAVE.mkdir(exist_ok=True, parents=True)
 
 # extract label from path
-label_from_path = lambda path: path.split("/")[-2]
+label_from_path = lambda path: str(path).split("/")[-2]
 
 # input and output for SVM with relevant kmers and labels
 def build_io_svm(paths_fcgr):
@@ -69,7 +70,16 @@ X,y = build_io_svm(LIST_FASTA) # input-output
 rkf = RepeatedKFold(n_splits=KFOLD, n_repeats=1, random_state=SEED) # k-fold sets
 
 # classifier
+ti = time.time()
 clf = make_pipeline(StandardScaler(), SVC(probability=True)) # pipeline with preprocessing
+tf = time.time() - ti
+with open("data/rf-svm/time-svm.json","w") as fp: 
+    json.dump(fp,
+            {
+                "cross_validation": tf,
+                "avg_kfold": tf/KFOLD
+            }
+    )
 
 probs = cross_val_predict(
     clf, X, y, cv=rkf, method="predict_proba"
@@ -87,17 +97,9 @@ def compute_metrics(y_true, y_proba):
     cm = confusion_matrix(y_true, y_pred)
     m_coeff = mcc(cm)
 
-    # auc score
-    y_true_auc = np.zeros((len(y_true), len(CLADES)))
-    for j,y in enumerate(y_true):
-        col = CLADES.index(y)
-        y_true_auc[j,col] = 1
-
-    auc = roc_auc_score(y_true_auc, y_proba, multi_class='ovo')
     return {
         "acc": accuracy,
-        "mcc": m_coeff,
-        "auc": auc
+        "mcc": m_coeff
     }
 
 # collect indexes used in each kfold

@@ -3,9 +3,9 @@ KMER: 6
 SPECIE: "hCoV-19"
 
 # INPUT DATA
-PATH_FASTA_GISAID: "/home/disco/Data/GISAID/sequences.fasta"
-PATH_METADATA: "/home/disco/Data/GISAID/metadata.tsv"
-PATH_REFERENCE_GENOME: "/home/disco/Data/GISAID/EPI_ISL_402124.fasta"
+PATH_FASTA_GISAID: "../GISAID/sequences.fasta"
+PATH_METADATA: "../GISAID/metadata.tsv"
+PATH_REFERENCE_GENOME: "../GISAID/EPI_ISL_402124.fasta"
 CLADES: ['S','L','G','V','GR','GH','GV','GK','GRY','O','GRA']
 SAMPLES_PER_CLADE: 20000
 
