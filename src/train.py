@@ -8,6 +8,7 @@ from sklearn.utils import class_weight
 from loaders.model_loader import ModelLoader
 from loaders.data_generator import DataGenerator  
 from preprocessing import Pipeline
+from callbacks import CSVTimeHistory
 from parameters import PARAMETERS
 
 # parameters
@@ -106,6 +107,12 @@ cb_csvlogger = tf.keras.callbacks.CSVLogger(
     append=False
 )
 
+cb_csvtime = CSVTimeHistory(
+    filename=f"data/train-{KFOLD}/time_log.csv",
+    separator=",",
+    append=False
+)
+
 # weighted loss function
 label_from_path = lambda path: path.split("/")[-2]
 labels_train = [label_from_path(path) for path in list_train]
@@ -131,5 +138,6 @@ model.fit(
         cb_reducelr,
         cb_earlystop,
         cb_csvlogger,
+        cb_csvtime
         ]
 )
